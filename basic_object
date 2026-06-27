@@ -1,0 +1,152 @@
+/*객체 생성 방법 1 - 객체 리터럴*/
+const user = {
+  age: 10,
+  name: "dave",
+};
+console.log(user);      //{ age: 10, name: 'dave' }
+console.log(user.age);  //10
+
+const user1 = {
+  age: 10,
+  name: "dave",
+  //객체에 매서드 생성
+  get_data: function () {
+    return 1 + 2;
+  },
+};
+console.log(user1.age, user1.get_data());   //10    3
+
+//빈 객체 선언 후 추가 가능
+const user3 = {};
+user3.name = "dave";
+user3.age = 10;
+user3.get_data = function () {
+  return 1 + 2;
+};
+console.log(user3.name, user3.get_data());  //dave  3
+
+// 객체 안에 객체 생성 가능
+const user4 = {
+  age: 10,
+  name: "dave",
+  details: {
+    hobby: "coding",
+    major: "japanese",
+    get_details: function (item) {
+      return item;
+    },
+  },
+  get_data: function () {
+    return 1 + 2;
+  },
+};
+console.log(user4.details.hobby);   //coding
+console.log(user4.details.get_details(1));  //1
+
+//this 키워드: 자신의 객체를 가리킴
+const user5 = {
+  age: 10,
+  name: "dave",
+  details: {
+    hobby: "coding",
+    major: "japanese",
+    get_hobby: function () {
+      return this.hobby;
+    },
+  },
+  get_name: function () {
+    return this.name;
+  },
+};
+console.log(user5.get_name());  //dave
+console.log(user5.details.get_hobby()); //coding
+
+//객체에 화살표 함수 선언 가능(이때 this키워드 사용 불가능)
+const user6 = {
+  age: 10,
+  name: "dave",
+  get_data: () => 1 + 2,
+};
+console.log(user6.get_data());  //3
+
+//getter(읽기), setter(수정)
+const user7 = {
+  age: 10,
+  name: "dave",
+  get get_age() {
+    return this.age;
+  },
+  set set_age(value) {
+    this.age = value;
+  },
+};
+console.log(user7.get_age); //괄호 없이 호출 => 10
+user7.set_age = 20; //괄호 없이 '=' 사용하여 대입
+console.log(user7.get_age); //20
+
+/*객체 생성 방법 2 - new object()*/
+const ob = new Object();
+ob.age = 10;
+ob.name = "dave";
+console.log(ob.age);    //10
+
+/*객체 생성 방법 3 - 생성자 함수(new 함수 사용하여 객체로 선언)*/
+function User(age, name) {
+  this.age = age;
+  this.name = name;
+}
+const dave = new User(10, "dave");
+console.log(dave.name); //dave
+
+//프로토타입 : 생성자 함수에 프로퍼티 또는 메서드 정의 가능
+User.prototype.message = function () {
+  return "Hello";
+};
+User.prototype.hobby = "coding";
+console.log(dave.hobby);    //coding
+
+/*ES6의 객채 생성 문법 : class 사용*/
+//constructor(): 클래스 생성자 함수(this 키워드 사용 가능)
+class User1 {
+  constructor(name) {
+    this.name = name;
+  }
+  get_message() {
+    return "Hello";
+  }
+}
+const dave1 = new User1("Dave");
+console.log(dave1.name);    //Dave
+console.log(dave1.get_message());   //Hello
+
+//상속(extends, super)
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+class Use extends Animal {
+  //extends를 사용해 상속할 클래스 선언
+  constructor(name, brand) {
+    super(name); //super(): 부모클래스의 constructor를 호출
+    this.brand = brand;
+  }
+}
+const carry = new Use("carry", "Funcoding");
+console.log(carry.name, carry.brand);   //carry funcoding
+
+//객체명.hasOwnProperty(변수명) : 해당 변수 명이 클래스 내부에서 선언한 프로퍼티임을 확인
+class Animal1 {
+  constructor(name) {
+    this.name = name;
+  }
+  get_message() {
+    return "Hello";
+  }
+}
+
+Animal1.prototype.age = 10;
+const ggu = new Animal1("ggu");
+console.log(ggu.hasOwnProperty("name"));    //true
+console.log(ggu.hasOwnProperty("age"));     //false
